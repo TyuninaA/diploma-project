@@ -19,19 +19,15 @@ public class MapPushkin extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mappushkin);
 
-        // Инициализация ImageView
         imageView = findViewById(R.id.imageView3);
 
-        // Инициализация кнопок
         undergroundButton = findViewById(R.id.undergroundPushkin);
         firstButton = findViewById(R.id.firstPushkin);
         secondButton = findViewById(R.id.secondPushkin);
         thirdButton = findViewById(R.id.thirdPushkin);
 
-        // Инициализация TextView
         floorNameTextView = findViewById(R.id.floorNameTextView);
 
-        // Установка обработчиков нажатий для каждой кнопки
         undergroundButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -60,15 +56,14 @@ public class MapPushkin extends AppCompatActivity {
             }
         });
 
-        // Установка изначального значения в Underground Floor
+
         changeImage(R.drawable.canteen, "Underground Floor");
     }
 
     private void changeImage(int imageResourceId, String floorName) {
-        // Изменение изображения
+
         imageView.setImageResource(imageResourceId);
 
-        // Изменение текста в TextView
         floorNameTextView.setText(floorName);
     }
 }

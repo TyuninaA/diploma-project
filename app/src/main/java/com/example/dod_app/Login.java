@@ -1,7 +1,7 @@
-// LoginActivity.java
 package com.example.dod_app;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -34,6 +34,14 @@ public class Login extends AppCompatActivity {
         textViewSignUp = findViewById(R.id.SignUp);
         progressBar = findViewById(R.id.progress);
 
+        SharedPreferences preferences = getSharedPreferences("user", MODE_PRIVATE);
+        String savedUsername = preferences.getString("username", null);
+        if (savedUsername != null) {
+            Intent intent = new Intent(Login.this, MainActivity.class);
+            startActivity(intent);
+            finish();
+        }
+
         textViewSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -63,7 +71,7 @@ public class Login extends AppCompatActivity {
                             String[] data = new String[2];
                             data[0] = username;
                             data[1] = password;
-                            PutData putData = new PutData("http://192.168.0.123//LoginRegister/login.php", "POST", field, data);
+                            PutData putData = new PutData("http://192.168.6.69//LoginRegister/login.php", "POST", field, data);
                             if (putData.startPut()) {
                                 if (putData.onComplete()) {
                                     progressBar.setVisibility(View.GONE);
@@ -71,6 +79,11 @@ public class Login extends AppCompatActivity {
                                     if (result.equals("Login Success")) {
                                         Toast.makeText(getApplicationContext(), result, Toast.LENGTH_SHORT).show();
                                         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+
+                                        // Сохраняем имя пользователя
+                                        SharedPreferences.Editor editor = preferences.edit();
+                                        editor.putString("username", username);
+                                        editor.apply();
 
                                         // Добавляем информацию о типе пользователя в Intent
                                         if (username.equals("admin")) {

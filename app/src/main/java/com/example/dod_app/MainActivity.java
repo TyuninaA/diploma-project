@@ -3,6 +3,7 @@ package com.example.dod_app;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -75,17 +76,20 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        // Добавляем обработчик нажатия для кнопки выхода
         ImageButton btnExit = findViewById(R.id.btnExit);
         btnExit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Ваш код для выхода
-                // Например, переход на окно логина
+                SharedPreferences preferences = getSharedPreferences("user", MODE_PRIVATE);
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.clear();
+                editor.apply();
+
                 Intent intent = new Intent(MainActivity.this, Login.class);
                 startActivity(intent);
-                finish(); // Закрываем текущую активность
+                finish();
             }
         });
+
     }
 }

@@ -19,10 +19,7 @@ public class MapNazarbayeva extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mapnazarbayev);
 
-        // Инициализация ImageView
         imageView = findViewById(R.id.imageView3);
-
-        // Инициализация кнопок
         undergroundButton = findViewById(R.id.undergroundNazarbayev);
         firstButton = findViewById(R.id.firstNazarbayev);
         secondButton = findViewById(R.id.secondNazarbayev);
@@ -30,10 +27,9 @@ public class MapNazarbayeva extends AppCompatActivity {
         fourthButton = findViewById(R.id.fourthNazarbayev);
         fifthButton = findViewById(R.id.fifthNazarbayev);
 
-        // Инициализация TextView для отображения названия этажа
+
         floorNameTextView = findViewById(R.id.floorNameTextView);
 
-        // Установка обработчиков нажатий для каждой кнопки
         undergroundButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -71,19 +67,15 @@ public class MapNazarbayeva extends AppCompatActivity {
         fifthButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                changeImage(R.drawable.fifth_floor_nazarbayev, "Fourth Floor");
+                changeImage(R.drawable.fifth_floor_nazarbayev, "Fifth Floor");
             }
         });
 
-        // Установка изначального значения в Underground Floor
         changeImage(R.drawable.canteen_nazarbayev, "Underground Floor");
     }
 
     private void changeImage(int imageResourceId, String floorName) {
-        // Изменение изображения
         imageView.setImageResource(imageResourceId);
-
-        // Изменение текста в TextView
         floorNameTextView.setText(floorName);
     }
 }

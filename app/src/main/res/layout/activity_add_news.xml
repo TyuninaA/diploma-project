@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <EditText
+        android:id="@+id/editTextTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Title"
+        android:layout_margin="16dp"/>
+
+    <EditText
+        android:id="@+id/editTextText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Text"
+        android:layout_below="@id/editTextTitle"
+        android:layout_margin="16dp"/>
+
+    <EditText
+        android:id="@+id/editTextImageUrl"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Image URL"
+        android:layout_below="@id/editTextText"
+        android:layout_margin="16dp"/>
+
+    <Button
+        android:id="@+id/buttonConfirm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Confirm"
+        android:layout_below="@id/editTextImageUrl"
+        android:layout_alignParentEnd="true"
+        android:layout_margin="16dp"/>
+
+    <Button
+        android:id="@+id/buttonCancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Cancel"
+        android:layout_below="@id/editTextImageUrl"
+        android:layout_alignParentStart="true"
+        android:layout_margin="16dp"/>
+
+</RelativeLayout>

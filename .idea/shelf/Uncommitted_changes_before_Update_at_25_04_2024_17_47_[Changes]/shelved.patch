@@ -1,0 +1,1044 @@
+Index: app/build.gradle.kts
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>plugins {\r\n    id(\"com.android.application\")\r\n}\r\n\r\nandroid {\r\n    namespace = \"com.example.dod_app\"\r\n    compileSdk = 34\r\n\r\n    defaultConfig {\r\n        applicationId = \"com.example.dod_app\"\r\n        minSdk = 19\r\n        targetSdk = 34\r\n        versionCode = 1\r\n        versionName = \"1.0\"\r\n\r\n        testInstrumentationRunner = \"androidx.test.runner.AndroidJUnitRunner\"\r\n    }\r\n\r\n    buildTypes {\r\n        release {\r\n            isMinifyEnabled = false\r\n            proguardFiles(\r\n                getDefaultProguardFile(\"proguard-android-optimize.txt\"),\r\n                \"proguard-rules.pro\"\r\n            )\r\n        }\r\n    }\r\n    compileOptions {\r\n        sourceCompatibility = JavaVersion.VERSION_1_8\r\n        targetCompatibility = JavaVersion.VERSION_1_8\r\n    }\r\n}\r\n\r\ndependencies {\r\n    implementation (\"com.github.VishnuSivadasVS:Advanced-HttpURLConnection:1.2\")\r\n    implementation(\"androidx.appcompat:appcompat:1.6.1\")\r\n    implementation(\"com.google.android.material:material:1.11.0\")\r\n    implementation(\"androidx.constraintlayout:constraintlayout:2.1.4\")\r\n    implementation(\"com.google.android.material:material:1.12.0-alpha03\")\r\n    implementation(\"com.android.volley:volley:1.2.1\")\r\n    implementation(\"com.squareup.picasso:picasso:2.71828\")\r\n\r\n\r\n    testImplementation(\"junit:junit:4.13.2\")\r\n    androidTestImplementation(\"androidx.test.ext:junit:1.1.5\")\r\n    androidTestImplementation(\"androidx.test.espresso:espresso-core:3.5.1\")\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/build.gradle.kts b/app/build.gradle.kts
+--- a/app/build.gradle.kts	(revision 8e2a4fee6fb32fce70b886d273608ab3aa945f71)
++++ b/app/build.gradle.kts	(date 1714042903711)
+@@ -39,6 +39,8 @@
+     implementation("com.google.android.material:material:1.12.0-alpha03")
+     implementation("com.android.volley:volley:1.2.1")
+     implementation("com.squareup.picasso:picasso:2.71828")
++    implementation ("com.github.bumptech.glide:glide:4.12.0")
++    annotationProcessor ("com.github.bumptech.glide:compiler:4.12.0")
+ 
+ 
+     testImplementation("junit:junit:4.13.2")
+Index: app/src/main/java/com/example/dod_app/SignUp.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.dod_app;\r\n\r\nimport android.content.Intent;\r\nimport android.os.Bundle;\r\nimport android.os.Handler;\r\nimport android.os.Looper;\r\nimport android.view.View;\r\nimport android.widget.Button;\r\nimport android.widget.ProgressBar;\r\nimport android.widget.TextView;\r\nimport android.widget.Toast;\r\n\r\nimport androidx.appcompat.app.AppCompatActivity;\r\n\r\nimport com.google.android.material.textfield.TextInputEditText;\r\nimport com.vishnusivadas.advanced_httpurlconnection.PutData;\r\n\r\npublic class SignUp extends AppCompatActivity {\r\n\r\n    TextInputEditText textInputEditTextfullname, textInputEditTextusername, textInputEditTextpassword, textInputEditTextemail;\r\n    Button buttonSignUp;\r\n    TextView textViewLogin;\r\n    ProgressBar progressBar;\r\n\r\n\r\n    @Override\r\n    protected void onCreate(Bundle savedInstanceState) {\r\n        super.onCreate(savedInstanceState);\r\n        setContentView(R.layout.activity_sign_up);\r\n        textInputEditTextfullname = findViewById(R.id.fullname);\r\n        textInputEditTextusername = findViewById(R.id.username);\r\n        textInputEditTextemail = findViewById(R.id.email);\r\n        textInputEditTextpassword = findViewById(R.id.password);\r\n        buttonSignUp = findViewById(R.id.btnSignUp);\r\n        textViewLogin = findViewById(R.id.Login);\r\n        progressBar = findViewById(R.id.progress);\r\n\r\n\r\n        textViewLogin.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View v) {\r\n                Intent intent = new Intent(getApplicationContext(), Login.class);\r\n                startActivity(intent);\r\n                finish();\r\n            }\r\n        });\r\n        buttonSignUp.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View v) {\r\n                String fullname, username, email, password;\r\n                fullname = String.valueOf(textInputEditTextfullname.getText());\r\n                username = String.valueOf(textInputEditTextusername.getText());\r\n                email = String.valueOf(textInputEditTextemail.getText());\r\n                password = String.valueOf(textInputEditTextpassword.getText());\r\n\r\n\r\n                if(!fullname.equals(\"\") && !username.equals(\"\") && !email.equals(\"\") && !password.equals(\"\")) {\r\n                    progressBar.setVisibility(View.VISIBLE);\r\n                    Handler handler = new Handler(Looper.getMainLooper());\r\n                    handler.post(new Runnable() {\r\n                        @Override\r\n                        public void run() {\r\n                            String[] field = new String[4];\r\n                            field[0] = \"fullname\";\r\n                            field[1] = \"username\";\r\n                            field[2] = \"password\";\r\n                            field[3] = \"email\";\r\n\r\n                            String[] data = new String[4];\r\n                            data[0] = fullname;\r\n                            data[1] = username;\r\n                            data[2] = password;\r\n                            data[3] = email;\r\n                            PutData putData = new PutData(\"http://192.168.0.123//LoginRegister/signup.php\", \"POST\", field, data);\r\n                            if (putData.startPut()) {\r\n                                if (putData.onComplete()) {\r\n                                    progressBar.setVisibility(View.GONE);\r\n                                    String result = putData.getResult();\r\n                                    if(result.equals(\"Sign Up Success\")){\r\n                                        Toast.makeText(getApplicationContext(), result, Toast.LENGTH_SHORT).show();\r\n                                        Intent intent = new Intent(getApplicationContext(), Login.class);\r\n                                        startActivity(intent);\r\n                                        finish();\r\n                                    }\r\n                                    else {\r\n                                        Toast.makeText(getApplicationContext(), result, Toast.LENGTH_SHORT).show();\r\n                                    }\r\n                                }\r\n                            }\r\n                        }\r\n                    });\r\n                }\r\n                else {\r\n                    Toast.makeText(getApplicationContext(), \"All fields are requires\", Toast.LENGTH_SHORT).show();\r\n                }\r\n            }\r\n        });\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/dod_app/SignUp.java b/app/src/main/java/com/example/dod_app/SignUp.java
+--- a/app/src/main/java/com/example/dod_app/SignUp.java	(revision 8e2a4fee6fb32fce70b886d273608ab3aa945f71)
++++ b/app/src/main/java/com/example/dod_app/SignUp.java	(date 1714042556809)
+@@ -71,7 +71,7 @@
+                             data[1] = username;
+                             data[2] = password;
+                             data[3] = email;
+-                            PutData putData = new PutData("http://192.168.0.123//LoginRegister/signup.php", "POST", field, data);
++                            PutData putData = new PutData("http://192.168.0.114//LoginRegister/signup.php", "POST", field, data);
+                             if (putData.startPut()) {
+                                 if (putData.onComplete()) {
+                                     progressBar.setVisibility(View.GONE);
+Index: app/src/main/java/com/example/dod_app/AddNewsDialog.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.dod_app;\r\n\r\nimport android.app.Dialog;\r\nimport android.content.Context;\r\nimport android.os.Bundle;\r\nimport android.view.View;\r\nimport android.widget.Button;\r\nimport android.widget.EditText;\r\n\r\nimport androidx.annotation.NonNull;\r\n\r\npublic class AddNewsDialog extends Dialog {\r\n\r\n    private EditText titleEditText, contentEditText, imageUrlEditText;\r\n    private OnAddNewsListener listener;\r\n\r\n    public interface OnAddNewsListener {\r\n        void onAddNews(String title, String content, String imageUrl);\r\n    }\r\n\r\n    public AddNewsDialog(@NonNull Context context) {\r\n        super(context);\r\n        this.listener = listener;\r\n    }\r\n\r\n    @Override\r\n    protected void onCreate(Bundle savedInstanceState) {\r\n        super.onCreate(savedInstanceState);\r\n        setContentView(R.layout.fragment_add_news);\r\n        setTitle(\"Добавить новость\");\r\n        setCancelable(true);\r\n\r\n        // Находим элементы в макете диалогового окна\r\n        titleEditText = findViewById(R.id.titleEditText);\r\n        contentEditText = findViewById(R.id.contentEditText);\r\n        imageUrlEditText = findViewById(R.id.imageUrlEditText);\r\n        Button addButton = findViewById(R.id.addNewsButton);\r\n\r\n        // Обработчик нажатия кнопки \"Добавить\"\r\n        addButton.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View v) {\r\n                // Получаем данные из полей ввода\r\n                String title = titleEditText.getText().toString().trim();\r\n                String content = contentEditText.getText().toString().trim();\r\n                String imageUrl = imageUrlEditText.getText().toString().trim();\r\n\r\n                // Проверяем, чтобы все поля были заполнены\r\n                if (!title.isEmpty() && !content.isEmpty() && !imageUrl.isEmpty()) {\r\n                    // Передаем данные в активити через слушателя\r\n                    if (listener != null) {\r\n                        listener.onAddNews(title, content, imageUrl);\r\n                    }\r\n                    // Закрываем диалоговое окно\r\n                    dismiss();\r\n                } else {\r\n                    // Если не все поля заполнены, выдаем сообщение\r\n                    // (можно также добавить визуальное выделение незаполненных полей)\r\n                    // Например:\r\n                    // titleEditText.setError(\"Введите заголовок\");\r\n                    // contentEditText.setError(\"Введите содержание\");\r\n                    // imageUrlEditText.setError(\"Введите URL изображения\");\r\n                }\r\n            }\r\n        });\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/dod_app/AddNewsDialog.java b/app/src/main/java/com/example/dod_app/AddNewsDialog.java
+--- a/app/src/main/java/com/example/dod_app/AddNewsDialog.java	(revision 8e2a4fee6fb32fce70b886d273608ab3aa945f71)
++++ b/app/src/main/java/com/example/dod_app/AddNewsDialog.java	(date 1714047960495)
+@@ -1,24 +1,20 @@
+ package com.example.dod_app;
+-
+ import android.app.Dialog;
+ import android.content.Context;
+ import android.os.Bundle;
+ import android.view.View;
+ import android.widget.Button;
+ import android.widget.EditText;
+-
+ import androidx.annotation.NonNull;
++import com.example.dod_app.R;
+ 
+ public class AddNewsDialog extends Dialog {
+ 
+     private EditText titleEditText, contentEditText, imageUrlEditText;
+-    private OnAddNewsListener listener;
++    private Button addButton;
++    private AddNewsListener listener;
+ 
+-    public interface OnAddNewsListener {
+-        void onAddNews(String title, String content, String imageUrl);
+-    }
+-
+-    public AddNewsDialog(@NonNull Context context) {
++    public AddNewsDialog(@NonNull Context context, AddNewsListener listener) {
+         super(context);
+         this.listener = listener;
+     }
+@@ -26,42 +22,31 @@
+     @Override
+     protected void onCreate(Bundle savedInstanceState) {
+         super.onCreate(savedInstanceState);
+-        setContentView(R.layout.fragment_add_news);
+-        setTitle("Добавить новость");
+-        setCancelable(true);
++        setContentView(R.layout.dialog_add_news);
+ 
+-        // Находим элементы в макете диалогового окна
+         titleEditText = findViewById(R.id.titleEditText);
+         contentEditText = findViewById(R.id.contentEditText);
+         imageUrlEditText = findViewById(R.id.imageUrlEditText);
+-        Button addButton = findViewById(R.id.addNewsButton);
++        addButton = findViewById(R.id.addButton);
+ 
+-        // Обработчик нажатия кнопки "Добавить"
+         addButton.setOnClickListener(new View.OnClickListener() {
+             @Override
+             public void onClick(View v) {
+-                // Получаем данные из полей ввода
+                 String title = titleEditText.getText().toString().trim();
+                 String content = contentEditText.getText().toString().trim();
+                 String imageUrl = imageUrlEditText.getText().toString().trim();
+ 
+-                // Проверяем, чтобы все поля были заполнены
+                 if (!title.isEmpty() && !content.isEmpty() && !imageUrl.isEmpty()) {
+-                    // Передаем данные в активити через слушателя
+-                    if (listener != null) {
+-                        listener.onAddNews(title, content, imageUrl);
+-                    }
+-                    // Закрываем диалоговое окно
++                    // Создаем новость и передаем обратно в активити
++                    News news = new News(title, content, imageUrl);
++                    listener.onNewsAdded(news);
+                     dismiss();
+-                } else {
+-                    // Если не все поля заполнены, выдаем сообщение
+-                    // (можно также добавить визуальное выделение незаполненных полей)
+-                    // Например:
+-                    // titleEditText.setError("Введите заголовок");
+-                    // contentEditText.setError("Введите содержание");
+-                    // imageUrlEditText.setError("Введите URL изображения");
+                 }
+             }
+         });
+     }
++
++    public interface AddNewsListener {
++        void onNewsAdded(News news);
++    }
+ }
+Index: app/src/main/java/com/example/dod_app/NewsAdapter.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.dod_app;\r\n\r\nimport android.content.Context;\r\nimport android.view.LayoutInflater;\r\nimport android.view.View;\r\nimport android.view.ViewGroup;\r\nimport android.widget.ImageView;\r\nimport android.widget.TextView;\r\n\r\nimport androidx.annotation.NonNull;\r\nimport androidx.recyclerview.widget.RecyclerView;\r\n\r\nimport java.util.List;\r\n\r\npublic class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {\r\n\r\n    private List<news> newsList;\r\n    private Context context;\r\n\r\n    public NewsAdapter(Context context, List<news> newsList) {\r\n        this.context = context;\r\n        this.newsList = newsList;\r\n    }\r\n\r\n    @NonNull\r\n    @Override\r\n    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {\r\n        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.news_item_recycler, parent, false);\r\n        return new ViewHolder(view);\r\n    }\r\n\r\n    @Override\r\n    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {\r\n        news news = newsList.get(position);\r\n        holder.newsTitle.setText(news.getTitle());\r\n        // Здесь нужно установить изображение новости в ImageView\r\n    }\r\n\r\n    @Override\r\n    public int getItemCount() {\r\n        return newsList.size();\r\n    }\r\n\r\n    public class ViewHolder extends RecyclerView.ViewHolder {\r\n\r\n        ImageView newsImage;\r\n        TextView newsTitle;\r\n\r\n        public ViewHolder(@NonNull View itemView) {\r\n            super(itemView);\r\n            newsImage = itemView.findViewById(R.id.newsImage);\r\n            newsTitle = itemView.findViewById(R.id.newsTitle);\r\n        }\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/dod_app/NewsAdapter.java b/app/src/main/java/com/example/dod_app/NewsAdapter.java
+--- a/app/src/main/java/com/example/dod_app/NewsAdapter.java	(revision 8e2a4fee6fb32fce70b886d273608ab3aa945f71)
++++ b/app/src/main/java/com/example/dod_app/NewsAdapter.java	(date 1714045339184)
+@@ -1,4 +1,5 @@
+ package com.example.dod_app;
++// NewsAdapter.java
+ 
+ import android.content.Context;
+ import android.view.LayoutInflater;
+@@ -10,14 +11,16 @@
+ import androidx.annotation.NonNull;
+ import androidx.recyclerview.widget.RecyclerView;
+ 
++import com.bumptech.glide.Glide;
++
+ import java.util.List;
+ 
+ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
+ 
+-    private List<news> newsList;
+     private Context context;
++    private List<News> newsList;
+ 
+-    public NewsAdapter(Context context, List<news> newsList) {
++    public NewsAdapter(Context context, List<News> newsList) {
+         this.context = context;
+         this.newsList = newsList;
+     }
+@@ -25,15 +28,16 @@
+     @NonNull
+     @Override
+     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.news_item_recycler, parent, false);
++        View view = LayoutInflater.from(context).inflate(R.layout.item_news, parent, false);
+         return new ViewHolder(view);
+     }
+ 
+     @Override
+     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+-        news news = newsList.get(position);
+-        holder.newsTitle.setText(news.getTitle());
+-        // Здесь нужно установить изображение новости в ImageView
++        News news = newsList.get(position);
++        holder.titleTextView.setText(news.getTitle());
++        holder.contentTextView.setText(news.getContent());
++        Glide.with(context).load(news.getImageUrl()).into(holder.newsImageView);
+     }
+ 
+     @Override
+@@ -41,15 +45,16 @@
+         return newsList.size();
+     }
+ 
+-    public class ViewHolder extends RecyclerView.ViewHolder {
+-
+-        ImageView newsImage;
+-        TextView newsTitle;
++    public static class ViewHolder extends RecyclerView.ViewHolder {
++        TextView titleTextView;
++        TextView contentTextView;
++        ImageView newsImageView;
+ 
+         public ViewHolder(@NonNull View itemView) {
+             super(itemView);
+-            newsImage = itemView.findViewById(R.id.newsImage);
+-            newsTitle = itemView.findViewById(R.id.newsTitle);
++            titleTextView = itemView.findViewById(R.id.titleTextView);
++            contentTextView = itemView.findViewById(R.id.contentTextView);
++            newsImageView = itemView.findViewById(R.id.newsImageView);
+         }
+     }
+ }
+Index: app/src/main/java/com/example/dod_app/Login.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>// LoginActivity.java\r\npackage com.example.dod_app;\r\n\r\nimport android.content.Intent;\r\nimport android.os.Bundle;\r\nimport android.os.Handler;\r\nimport android.os.Looper;\r\nimport android.view.View;\r\nimport android.widget.Button;\r\nimport android.widget.ProgressBar;\r\nimport android.widget.TextView;\r\nimport android.widget.Toast;\r\n\r\nimport androidx.appcompat.app.AppCompatActivity;\r\n\r\nimport com.google.android.material.textfield.TextInputEditText;\r\nimport com.vishnusivadas.advanced_httpurlconnection.PutData;\r\n\r\npublic class Login extends AppCompatActivity {\r\n\r\n    TextInputEditText textInputEditTextUsername, textInputEditTextPassword;\r\n    Button buttonLogin;\r\n    TextView textViewSignUp;\r\n    ProgressBar progressBar;\r\n\r\n    @Override\r\n    protected void onCreate(Bundle savedInstanceState) {\r\n        super.onCreate(savedInstanceState);\r\n        setContentView(R.layout.activity_login);\r\n\r\n        textInputEditTextUsername = findViewById(R.id.usernamelogin);\r\n        textInputEditTextPassword = findViewById(R.id.passwordlogin);\r\n        buttonLogin = findViewById(R.id.btnLogin);\r\n        textViewSignUp = findViewById(R.id.SignUp);\r\n        progressBar = findViewById(R.id.progress);\r\n\r\n        textViewSignUp.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View v) {\r\n                Intent intent = new Intent(getApplicationContext(), SignUp.class);\r\n                startActivity(intent);\r\n                finish();\r\n            }\r\n        });\r\n\r\n        buttonLogin.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View v) {\r\n                String username, password;\r\n                username = String.valueOf(textInputEditTextUsername.getText());\r\n                password = String.valueOf(textInputEditTextPassword.getText());\r\n\r\n                if (!username.equals(\"\") && !password.equals(\"\")) {\r\n                    progressBar.setVisibility(View.VISIBLE);\r\n                    Handler handler = new Handler(Looper.getMainLooper());\r\n                    handler.post(new Runnable() {\r\n                        @Override\r\n                        public void run() {\r\n                            String[] field = new String[2];\r\n                            field[0] = \"username\";\r\n                            field[1] = \"password\";\r\n\r\n                            String[] data = new String[2];\r\n                            data[0] = username;\r\n                            data[1] = password;\r\n                            PutData putData = new PutData(\"http://192.168.0.123//LoginRegister/login.php\", \"POST\", field, data);\r\n                            if (putData.startPut()) {\r\n                                if (putData.onComplete()) {\r\n                                    progressBar.setVisibility(View.GONE);\r\n                                    String result = putData.getResult();\r\n                                    if (result.equals(\"Login Success\")) {\r\n                                        Toast.makeText(getApplicationContext(), result, Toast.LENGTH_SHORT).show();\r\n                                        Intent intent = new Intent(getApplicationContext(), MainActivity.class);\r\n\r\n                                        // Добавляем информацию о типе пользователя в Intent\r\n                                        if (username.equals(\"admin\")) {\r\n                                            intent.putExtra(\"userType\", \"admin\");\r\n                                        } else {\r\n                                            intent.putExtra(\"userType\", \"regular\");\r\n                                        }\r\n\r\n                                        startActivity(intent);\r\n                                        finish();\r\n                                    } else {\r\n                                        Toast.makeText(getApplicationContext(), result, Toast.LENGTH_SHORT).show();\r\n                                    }\r\n                                }\r\n                            }\r\n                        }\r\n                    });\r\n                } else {\r\n                    Toast.makeText(getApplicationContext(), \"All fields are required\", Toast.LENGTH_SHORT).show();\r\n                }\r\n            }\r\n        });\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/dod_app/Login.java b/app/src/main/java/com/example/dod_app/Login.java
+--- a/app/src/main/java/com/example/dod_app/Login.java	(revision 8e2a4fee6fb32fce70b886d273608ab3aa945f71)
++++ b/app/src/main/java/com/example/dod_app/Login.java	(date 1714047708502)
+@@ -63,7 +63,7 @@
+                             String[] data = new String[2];
+                             data[0] = username;
+                             data[1] = password;
+-                            PutData putData = new PutData("http://192.168.0.123//LoginRegister/login.php", "POST", field, data);
++                            PutData putData = new PutData("http://192.168.0.114//LoginRegister/login.php", "POST", field, data);
+                             if (putData.startPut()) {
+                                 if (putData.onComplete()) {
+                                     progressBar.setVisibility(View.GONE);
+Index: app/src/main/java/com/example/dod_app/Home.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.dod_app;\r\n\r\nimport android.os.Bundle;\r\nimport android.view.LayoutInflater;\r\nimport android.view.View;\r\nimport android.view.ViewGroup;\r\nimport android.widget.Button;\r\nimport android.widget.Toast;\r\n\r\nimport androidx.annotation.NonNull;\r\nimport androidx.annotation.Nullable;\r\nimport androidx.fragment.app.Fragment;\r\nimport androidx.recyclerview.widget.LinearLayoutManager;\r\nimport androidx.recyclerview.widget.RecyclerView;\r\n\r\nimport com.android.volley.Request;\r\nimport com.android.volley.Response;\r\nimport com.android.volley.VolleyError;\r\nimport com.android.volley.toolbox.JsonArrayRequest;\r\nimport com.android.volley.toolbox.Volley;\r\n\r\nimport org.json.JSONArray;\r\nimport org.json.JSONException;\r\nimport org.json.JSONObject;\r\n\r\nimport java.util.ArrayList;\r\nimport java.util.List;\r\n\r\npublic class Home extends Fragment {\r\n\r\n    private RecyclerView recyclerView;\r\n    private NewsAdapter newsAdapter;\r\n    private List<news> newsList;\r\n    private Button addNewsButton;\r\n\r\n    @Nullable\r\n    @Override\r\n    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {\r\n        return inflater.inflate(R.layout.fragment_home, container, false);\r\n    }\r\n\r\n    @Override\r\n    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {\r\n        super.onViewCreated(view, savedInstanceState);\r\n\r\n        recyclerView = view.findViewById(R.id.recyclerView);\r\n        recyclerView.setHasFixedSize(true);\r\n        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));\r\n\r\n        // Получение списка новостей с сервера\r\n        getNewsFromServer();\r\n\r\n        // Находим кнопку \"Добавить новость\" в макете\r\n        addNewsButton = view.findViewById(R.id.addNewsButton);\r\n\r\n        // Получаем тип пользователя из MainActivity\r\n        String userType = getActivity().getIntent().getStringExtra(\"userType\");\r\n\r\n        // Проверяем, является ли пользователь администратором, и отображаем кнопку \"Добавить новость\" при необходимости\r\n        if (userType != null && userType.equals(\"admin\")) {\r\n            // Отображаем кнопку \"Добавить новость\"\r\n            addNewsButton.setVisibility(View.VISIBLE);\r\n        } else {\r\n            // Скрываем кнопку \"Добавить новость\"\r\n            addNewsButton.setVisibility(View.GONE);\r\n        }\r\n\r\n        // Обработчик нажатия кнопки \"Добавить новость\"\r\n        addNewsButton.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View v) {\r\n                // Открыть диалоговое окно добавления новости\r\n                AddNewsDialog addNewsDialog = new AddNewsDialog(getActivity());\r\n                addNewsDialog.show();\r\n            }\r\n        });\r\n    }\r\n\r\n    private void getNewsFromServer() {\r\n        newsList = new ArrayList<>();\r\n\r\n        // URL для запроса новостей с сервера\r\n        String url = \"http://192.168.0.123//LoginRegister/get_news.php\";\r\n\r\n        // Создание запроса с помощью Volley\r\n        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null,\r\n                new Response.Listener<JSONArray>() {\r\n                    @Override\r\n                    public void onResponse(JSONArray response) {\r\n                        try {\r\n                            // Обработка ответа сервера\r\n                            for (int i = 0; i < response.length(); i++) {\r\n                                JSONObject jsonObject = response.getJSONObject(i);\r\n                                String title = jsonObject.getString(\"title\");\r\n                                String content = jsonObject.getString(\"content\");\r\n                                String imageUrl = jsonObject.getString(\"image_url\");\r\n\r\n                                // Создание объекта новости и добавление его в список\r\n                                newsList.add(new news(title, content, imageUrl));\r\n                            }\r\n\r\n                            // Установка адаптера для RecyclerView\r\n                            newsAdapter = new NewsAdapter(getActivity(), newsList);\r\n                            recyclerView.setAdapter(newsAdapter);\r\n\r\n                        } catch (JSONException e) {\r\n                            e.printStackTrace();\r\n                        }\r\n                    }\r\n                },\r\n                new Response.ErrorListener() {\r\n                    @Override\r\n                    public void onErrorResponse(VolleyError error) {\r\n                        // Обработка ошибки при получении новостей с сервера\r\n                        Toast.makeText(getActivity(), \"Error fetching news: \" + error.getMessage(), Toast.LENGTH_SHORT).show();\r\n                    }\r\n                });\r\n\r\n        // Добавление запроса в очередь Volley\r\n        Volley.newRequestQueue(getActivity()).add(jsonArrayRequest);\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/dod_app/Home.java b/app/src/main/java/com/example/dod_app/Home.java
+--- a/app/src/main/java/com/example/dod_app/Home.java	(revision 8e2a4fee6fb32fce70b886d273608ab3aa945f71)
++++ b/app/src/main/java/com/example/dod_app/Home.java	(date 1714048918642)
+@@ -1,122 +1,101 @@
+ package com.example.dod_app;
+ 
++import android.content.Intent;
+ import android.os.Bundle;
++import android.os.Handler;
++import android.os.Looper;
+ import android.view.LayoutInflater;
+ import android.view.View;
+ import android.view.ViewGroup;
+ import android.widget.Button;
++import android.widget.ProgressBar;
+ import android.widget.Toast;
+-
+ import androidx.annotation.NonNull;
+ import androidx.annotation.Nullable;
+ import androidx.fragment.app.Fragment;
+ import androidx.recyclerview.widget.LinearLayoutManager;
+ import androidx.recyclerview.widget.RecyclerView;
+-
+ import com.android.volley.Request;
+ import com.android.volley.Response;
+ import com.android.volley.VolleyError;
+ import com.android.volley.toolbox.JsonArrayRequest;
+ import com.android.volley.toolbox.Volley;
+-
+ import org.json.JSONArray;
+ import org.json.JSONException;
+ import org.json.JSONObject;
+-
+ import java.util.ArrayList;
+ import java.util.List;
+ 
+ public class Home extends Fragment {
+ 
+     private RecyclerView recyclerView;
++    private List<News> newsList;
+     private NewsAdapter newsAdapter;
+-    private List<news> newsList;
+     private Button addNewsButton;
+-
+-    @Nullable
+-    @Override
+-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+-        return inflater.inflate(R.layout.fragment_home, container, false);
+-    }
++    private ProgressBar progressBar;
++    private String userType; // Добавляем переменную для хранения типа пользователя
+ 
+     @Override
+-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+-        super.onViewCreated(view, savedInstanceState);
++    public View onCreateView(LayoutInflater inflater, ViewGroup container,
++                             Bundle savedInstanceState) {
++        View view = inflater.inflate(R.layout.fragment_news, container, false);
+ 
+         recyclerView = view.findViewById(R.id.recyclerView);
+-        recyclerView.setHasFixedSize(true);
+-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
++        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
++        newsList = new ArrayList<>();
++        newsAdapter = new NewsAdapter(getContext(), newsList);
++        recyclerView.setAdapter(newsAdapter);
+ 
+-        // Получение списка новостей с сервера
+-        getNewsFromServer();
+-
+-        // Находим кнопку "Добавить новость" в макете
+         addNewsButton = view.findViewById(R.id.addNewsButton);
++        progressBar = view.findViewById(R.id.progress);
+ 
+-        // Получаем тип пользователя из MainActivity
+-        String userType = getActivity().getIntent().getStringExtra("userType");
++        // Получаем тип пользователя из предыдущей активности
++        userType = getActivity().getIntent().getStringExtra("userType");
+ 
+-        // Проверяем, является ли пользователь администратором, и отображаем кнопку "Добавить новость" при необходимости
+-        if (userType != null && userType.equals("admin")) {
+-            // Отображаем кнопку "Добавить новость"
++        // Проверяем тип пользователя и устанавливаем видимость кнопки "Добавить новость" соответственно
++        if ("admin".equals(userType)) {
+             addNewsButton.setVisibility(View.VISIBLE);
+         } else {
+-            // Скрываем кнопку "Добавить новость"
+             addNewsButton.setVisibility(View.GONE);
+         }
+ 
+-        // Обработчик нажатия кнопки "Добавить новость"
+-        addNewsButton.setOnClickListener(new View.OnClickListener() {
+-            @Override
+-            public void onClick(View v) {
+-                // Открыть диалоговое окно добавления новости
+-                AddNewsDialog addNewsDialog = new AddNewsDialog(getActivity());
+-                addNewsDialog.show();
+-            }
+-        });
+-    }
+-
+-    private void getNewsFromServer() {
+-        newsList = new ArrayList<>();
++        fetchNews();
+ 
+-        // URL для запроса новостей с сервера
+-        String url = "http://192.168.0.123//LoginRegister/get_news.php";
++        return view;
++    }
+ 
+-        // Создание запроса с помощью Volley
+-        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null,
++    private void fetchNews() {
++        String url = "http://192.168.0.114//LoginRegister/get_news.php";
++        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
++                Request.Method.GET,
++                url,
++                null,
+                 new Response.Listener<JSONArray>() {
+                     @Override
+                     public void onResponse(JSONArray response) {
+-                        try {
+-                            // Обработка ответа сервера
+-                            for (int i = 0; i < response.length(); i++) {
++                        for (int i = 0; i < response.length(); i++) {
++                            try {
+                                 JSONObject jsonObject = response.getJSONObject(i);
+                                 String title = jsonObject.getString("title");
+-                                String content = jsonObject.getString("content");
++                                String text = jsonObject.getString("text");
+                                 String imageUrl = jsonObject.getString("image_url");
+-
+-                                // Создание объекта новости и добавление его в список
+-                                newsList.add(new news(title, content, imageUrl));
+-                            }
+-
+-                            // Установка адаптера для RecyclerView
+-                            newsAdapter = new NewsAdapter(getActivity(), newsList);
+-                            recyclerView.setAdapter(newsAdapter);
+-
+-                        } catch (JSONException e) {
+-                            e.printStackTrace();
++                                News news = new News(title, text, imageUrl);
++                                newsList.add(news);
++                            } catch (JSONException e) {
++                                e.printStackTrace();
++                            }
+                         }
++                        newsAdapter.notifyDataSetChanged();
+                     }
+                 },
+                 new Response.ErrorListener() {
+                     @Override
+                     public void onErrorResponse(VolleyError error) {
+-                        // Обработка ошибки при получении новостей с сервера
+-                        Toast.makeText(getActivity(), "Error fetching news: " + error.getMessage(), Toast.LENGTH_SHORT).show();
++                        Toast.makeText(getContext(), "Error fetching news", Toast.LENGTH_SHORT).show();
+                     }
+-                });
++                }
++        );
+ 
+-        // Добавление запроса в очередь Volley
+-        Volley.newRequestQueue(getActivity()).add(jsonArrayRequest);
++        Volley.newRequestQueue(getContext()).add(jsonArrayRequest);
+     }
+-}
+\ No newline at end of file
++}
+Index: app/src/main/java/com/example/dod_app/news.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/dod_app/news.java b/app/src/main/java/com/example/dod_app/news.java
+deleted file mode 100644
+--- a/app/src/main/java/com/example/dod_app/news.java	(revision 8e2a4fee6fb32fce70b886d273608ab3aa945f71)
++++ /dev/null	(revision 8e2a4fee6fb32fce70b886d273608ab3aa945f71)
+@@ -1,25 +0,0 @@
+-package com.example.dod_app;
+-
+-public class news {
+-    private String title;
+-    private String content;
+-    private String imageUrl;
+-
+-    public news(String title, String content, String imageUrl) {
+-        this.title = title;
+-        this.content = content;
+-        this.imageUrl = imageUrl;
+-    }
+-
+-    public String getTitle() {
+-        return title;
+-    }
+-
+-    public String getContent() {
+-        return content;
+-    }
+-
+-    public String getImageUrl() {
+-        return imageUrl;
+-    }
+-}
+Index: app/src/main/res/layout/news_item_recycler.xml
+===================================================================
+diff --git a/app/src/main/res/layout/news_item_recycler.xml b/app/src/main/res/layout/news_item_recycler.xml
+deleted file mode 100644
+--- a/app/src/main/res/layout/news_item_recycler.xml	(revision 8e2a4fee6fb32fce70b886d273608ab3aa945f71)
++++ /dev/null	(revision 8e2a4fee6fb32fce70b886d273608ab3aa945f71)
+@@ -1,25 +0,0 @@
+-<!-- news_item_recycler.xml -->
+-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+-    android:layout_width="match_parent"
+-    android:layout_height="wrap_content">
+-
+-    <ImageView
+-        android:id="@+id/newsImage"
+-        android:layout_width="match_parent"
+-        android:layout_height="200dp"
+-        android:scaleType="centerCrop"
+-        android:src="@drawable/logo" />
+-
+-    <TextView
+-        android:id="@+id/newsTitle"
+-        android:layout_width="match_parent"
+-        android:layout_height="wrap_content"
+-        android:layout_alignParentBottom="true"
+-        android:layout_marginBottom="-1dp"
+-        android:background="#80000000"
+-        android:padding="30dp"
+-        android:text="News Title"
+-        android:textColor="@color/white"
+-        android:textSize="26sp" />
+-
+-</RelativeLayout>
+Index: app/src/main/java/com/example/dod_app/DBHelper.java
+===================================================================
+diff --git a/app/src/main/java/com/example/dod_app/DBHelper.java b/app/src/main/java/com/example/dod_app/DBHelper.java
+deleted file mode 100644
+--- a/app/src/main/java/com/example/dod_app/DBHelper.java	(revision 8e2a4fee6fb32fce70b886d273608ab3aa945f71)
++++ /dev/null	(revision 8e2a4fee6fb32fce70b886d273608ab3aa945f71)
+@@ -1,58 +0,0 @@
+-package com.example.dod_app;
+-
+-import java.sql.Connection;
+-import java.sql.DriverManager;
+-import java.sql.ResultSet;
+-import java.sql.SQLException;
+-import java.sql.Statement;
+-import java.util.ArrayList;
+-import java.util.List;
+-
+-public class DBHelper {
+-
+-    // Укажите IP-адрес вашего сервера MySQL и имя вашей базы данных
+-    private static final String DB_URL = "http://localhost:3306/news";
+-
+-    private static final String DB_USER = "root";
+-    private static final String DB_PASS = "";
+-
+-    public List<news> getAllNews() {
+-        List<news> newsList = new ArrayList<>();
+-        Connection conn = null;
+-        Statement stmt = null;
+-        ResultSet rs = null;
+-        try {
+-            // Устанавливаем соединение с базой данных
+-            conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
+-            stmt = conn.createStatement();
+-            String sql = "SELECT * FROM news";
+-            // Выполняем SQL-запрос
+-            rs = stmt.executeQuery(sql);
+-            // Обрабатываем результат запроса
+-            while (rs.next()) {
+-                // Создаем объект News на основе данных из результата запроса
+-                news news = new news(
+-                        rs.getString("title"),
+-                        rs.getString("content"),
+-                        rs.getString("image_url")
+-                );
+-                // Добавляем объект News в список новостей
+-                newsList.add(news);
+-            }
+-        } catch (SQLException e) {
+-            e.printStackTrace();
+-        } finally {
+-            // Закрываем ресурсы
+-            try {
+-                if (rs != null) rs.close();
+-                if (stmt != null) stmt.close();
+-                if (conn != null) conn.close();
+-            } catch (SQLException e) {
+-                e.printStackTrace();
+-            }
+-        }
+-        return newsList;
+-    }
+-
+-    // Другие методы для добавления, обновления, удаления новостей и т. д.
+-}
+Index: app/src/main/java/com/example/dod_app/NewsDetailDialogFragment.java
+===================================================================
+diff --git a/app/src/main/java/com/example/dod_app/NewsDetailDialogFragment.java b/app/src/main/java/com/example/dod_app/NewsDetailDialogFragment.java
+deleted file mode 100644
+--- a/app/src/main/java/com/example/dod_app/NewsDetailDialogFragment.java	(revision 8e2a4fee6fb32fce70b886d273608ab3aa945f71)
++++ /dev/null	(revision 8e2a4fee6fb32fce70b886d273608ab3aa945f71)
+@@ -1,58 +0,0 @@
+-package com.example.dod_app;
+-
+-import android.os.Bundle;
+-import android.view.LayoutInflater;
+-import android.view.View;
+-import android.view.ViewGroup;
+-import android.widget.ImageView;
+-import android.widget.TextView;
+-
+-import androidx.annotation.NonNull;
+-import androidx.annotation.Nullable;
+-import androidx.fragment.app.DialogFragment;
+-
+-public class NewsDetailDialogFragment extends DialogFragment {
+-
+-    private static final String ARG_TITLE = "arg_title";
+-    private static final String ARG_CONTENT = "arg_content";
+-    private static final String ARG_IMAGE_URL = "arg_image_url";
+-
+-    public static NewsDetailDialogFragment newInstance(String title, String content, String imageUrl) {
+-        Bundle args = new Bundle();
+-        args.putString(ARG_TITLE, title);
+-        args.putString(ARG_CONTENT, content);
+-        args.putString(ARG_IMAGE_URL, imageUrl);
+-        NewsDetailDialogFragment fragment = new NewsDetailDialogFragment();
+-        fragment.setArguments(args);
+-        return fragment;
+-    }
+-
+-    @Nullable
+-    @Override
+-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+-        return inflater.inflate(R.layout.fragment_news_detail, container, false);
+-    }
+-
+-    @Override
+-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+-        super.onViewCreated(view, savedInstanceState);
+-
+-        // Получаем данные о новости из аргументов
+-        Bundle args = getArguments();
+-        if (args != null) {
+-            String title = args.getString(ARG_TITLE);
+-            String content = args.getString(ARG_CONTENT);
+-            String imageUrl = args.getString(ARG_IMAGE_URL);
+-
+-            // Отображаем информацию о новости в диалоговом окне
+-            TextView titleTextView = view.findViewById(R.id.titleTextView);
+-            TextView contentTextView = view.findViewById(R.id.contentTextView);
+-            ImageView imageView = view.findViewById(R.id.imageView);
+-
+-            titleTextView.setText(title);
+-            contentTextView.setText(content);
+-            // Установите изображение новости в imageView, используя библиотеку Picasso или Glide
+-        }
+-    }
+-}
+-
+Index: app/src/main/java/com/example/dod_app/NewsDetailDialog.java
+===================================================================
+diff --git a/app/src/main/java/com/example/dod_app/NewsDetailDialog.java b/app/src/main/java/com/example/dod_app/NewsDetailDialog.java
+deleted file mode 100644
+--- a/app/src/main/java/com/example/dod_app/NewsDetailDialog.java	(revision 8e2a4fee6fb32fce70b886d273608ab3aa945f71)
++++ /dev/null	(revision 8e2a4fee6fb32fce70b886d273608ab3aa945f71)
+@@ -1,45 +0,0 @@
+-package com.example.dod_app;
+-
+-import android.app.AlertDialog;
+-import android.app.Dialog;
+-import android.os.Bundle;
+-import android.widget.ImageView;
+-import android.widget.TextView;
+-
+-import androidx.annotation.NonNull;
+-import androidx.annotation.Nullable;
+-import androidx.fragment.app.DialogFragment;
+-
+-public class NewsDetailDialog extends DialogFragment {
+-
+-    private String title;
+-    private String content;
+-    private String imageUrl;
+-
+-    public NewsDetailDialog(String title, String content, String imageUrl) {
+-        this.title = title;
+-        this.content = content;
+-        this.imageUrl = imageUrl;
+-    }
+-
+-    @NonNull
+-    @Override
+-    public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
+-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+-        builder.setView(R.layout.news_detail_dialog);
+-
+-        Dialog dialog = builder.create();
+-        dialog.show();
+-
+-        TextView textViewTitle = dialog.findViewById(R.id.textViewTitle);
+-        TextView textViewContent = dialog.findViewById(R.id.textViewContent);
+-        ImageView imageViewNews = dialog.findViewById(R.id.imageViewNews);
+-
+-        textViewTitle.setText(title);
+-        textViewContent.setText(content);
+-        // Установите изображение в imageViewNews используя библиотеку Picasso или Glide
+-
+-        return dialog;
+-    }
+-}
+-
+Index: app/src/main/res/layout/fragment_news_detail.xml
+===================================================================
+diff --git a/app/src/main/res/layout/fragment_news_detail.xml b/app/src/main/res/layout/fragment_news_detail.xml
+deleted file mode 100644
+--- a/app/src/main/res/layout/fragment_news_detail.xml	(revision 8e2a4fee6fb32fce70b886d273608ab3aa945f71)
++++ /dev/null	(revision 8e2a4fee6fb32fce70b886d273608ab3aa945f71)
+@@ -1,30 +0,0 @@
+-<?xml version="1.0" encoding="utf-8"?>
+-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+-    android:layout_width="match_parent"
+-    android:layout_height="match_parent"
+-    android:orientation="vertical">
+-
+-    <TextView
+-        android:id="@+id/titleTextView"
+-        android:layout_width="match_parent"
+-        android:layout_height="wrap_content"
+-        android:textSize="18sp"
+-        android:textStyle="bold"
+-        android:padding="16dp" />
+-
+-    <TextView
+-        android:id="@+id/contentTextView"
+-        android:layout_width="match_parent"
+-        android:layout_height="wrap_content"
+-        android:textSize="16sp"
+-        android:padding="16dp" />
+-
+-    <ImageView
+-        android:id="@+id/imageView"
+-        android:layout_width="match_parent"
+-        android:layout_height="wrap_content"
+-        android:scaleType="centerCrop"
+-        android:adjustViewBounds="true"
+-        android:padding="16dp" />
+-
+-</LinearLayout>
+Index: app/src/main/res/layout/news_detail_dialog.xml
+===================================================================
+diff --git a/app/src/main/res/layout/news_detail_dialog.xml b/app/src/main/res/layout/news_detail_dialog.xml
+deleted file mode 100644
+--- a/app/src/main/res/layout/news_detail_dialog.xml	(revision 8e2a4fee6fb32fce70b886d273608ab3aa945f71)
++++ /dev/null	(revision 8e2a4fee6fb32fce70b886d273608ab3aa945f71)
+@@ -1,28 +0,0 @@
+-<!-- news_detail_dialog.xml -->
+-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+-    android:layout_width="match_parent"
+-    android:layout_height="wrap_content"
+-    android:orientation="vertical"
+-    android:padding="16dp">
+-
+-    <TextView
+-        android:id="@+id/textViewTitle"
+-        android:layout_width="match_parent"
+-        android:layout_height="wrap_content"
+-        android:textSize="18sp"
+-        android:textStyle="bold"
+-        android:layout_marginBottom="8dp"/>
+-
+-    <TextView
+-        android:id="@+id/textViewContent"
+-        android:layout_width="match_parent"
+-        android:layout_height="wrap_content"
+-        android:layout_marginBottom="8dp"/>
+-
+-    <ImageView
+-        android:id="@+id/imageViewNews"
+-        android:layout_width="match_parent"
+-        android:layout_height="wrap_content"
+-        android:scaleType="fitXY"/>
+-
+-</LinearLayout>
+Index: README.md
+===================================================================
+diff --git a/README.md b/README.md
+deleted file mode 100644
+--- a/README.md	(revision 8e2a4fee6fb32fce70b886d273608ab3aa945f71)
++++ /dev/null	(revision 8e2a4fee6fb32fce70b886d273608ab3aa945f71)
+@@ -1,2 +0,0 @@
+-# DoD
+-# DoD
+Index: .idea/misc.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/misc.xml b/.idea/misc.xml
+new file mode 100644
+--- /dev/null	(date 1713766560149)
++++ b/.idea/misc.xml	(date 1713766560149)
+@@ -0,0 +1,10 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<project version="4">
++  <component name="ExternalStorageConfigurationManager" enabled="true" />
++  <component name="ProjectRootManager" version="2" languageLevel="JDK_17" default="true" project-jdk-name="jbr-17" project-jdk-type="JavaSDK">
++    <output url="file://$PROJECT_DIR$/build/classes" />
++  </component>
++  <component name="ProjectType">
++    <option name="id" value="Android" />
++  </component>
++</project>
+\ No newline at end of file
+Index: app/src/main/res/layout/dialog_add_news.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/layout/dialog_add_news.xml b/app/src/main/res/layout/dialog_add_news.xml
+new file mode 100644
+--- /dev/null	(date 1714047928401)
++++ b/app/src/main/res/layout/dialog_add_news.xml	(date 1714047928401)
+@@ -0,0 +1,32 @@
++<?xml version="1.0" encoding="utf-8"?>
++<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
++    android:layout_width="match_parent"
++    android:layout_height="wrap_content"
++    android:orientation="vertical"
++    android:padding="16dp">
++
++    <EditText
++        android:id="@+id/titleEditText"
++        android:layout_width="match_parent"
++        android:layout_height="wrap_content"
++        android:hint="Title" />
++
++    <EditText
++        android:id="@+id/contentEditText"
++        android:layout_width="match_parent"
++        android:layout_height="wrap_content"
++        android:hint="Content" />
++
++    <EditText
++        android:id="@+id/imageUrlEditText"
++        android:layout_width="match_parent"
++        android:layout_height="wrap_content"
++        android:hint="Image URL" />
++
++    <Button
++        android:id="@+id/addButton"
++        android:layout_width="wrap_content"
++        android:layout_height="wrap_content"
++        android:text="Add" />
++
++</LinearLayout>
+Index: app/src/main/java/com/example/dod_app/News.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/dod_app/News.java b/app/src/main/java/com/example/dod_app/News.java
+new file mode 100644
+--- /dev/null	(date 1714044168756)
++++ b/app/src/main/java/com/example/dod_app/News.java	(date 1714044168756)
+@@ -0,0 +1,38 @@
++package com.example.dod_app;
++
++// News.java
++public class News {
++    private String title;
++    private String text;
++    private String imageUrl;
++
++    public News(String title, String text, String imageUrl) {
++        this.title = title;
++        this.text = text;
++        this.imageUrl = imageUrl;
++    }
++
++    public String getTitle() {
++        return title;
++    }
++
++    public void setTitle(String title) {
++        this.title = title;
++    }
++
++    public String getContent() {
++        return text;
++    }
++
++    public void setContent(String content) {
++        this.text = content;
++    }
++
++    public String getImageUrl() {
++        return imageUrl;
++    }
++
++    public void setImageUrl(String imageUrl) {
++        this.imageUrl = imageUrl;
++    }
++}
+Index: .idea/compiler.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/compiler.xml b/.idea/compiler.xml
+new file mode 100644
+--- /dev/null	(date 1713766560156)
++++ b/.idea/compiler.xml	(date 1713766560156)
+@@ -0,0 +1,6 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<project version="4">
++  <component name="CompilerConfiguration">
++    <bytecodeTargetLevel target="17" />
++  </component>
++</project>
+\ No newline at end of file
+Index: .idea/deploymentTargetDropDown.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/deploymentTargetDropDown.xml b/.idea/deploymentTargetDropDown.xml
+new file mode 100644
+--- /dev/null	(date 1713780632602)
++++ b/.idea/deploymentTargetDropDown.xml	(date 1713780632602)
+@@ -0,0 +1,10 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<project version="4">
++  <component name="deploymentTargetDropDown">
++    <value>
++      <entry key="app">
++        <State />
++      </entry>
++    </value>
++  </component>
++</project>
+\ No newline at end of file
+Index: app/src/main/res/layout/fragment_news.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/layout/fragment_news.xml b/app/src/main/res/layout/fragment_news.xml
+new file mode 100644
+--- /dev/null	(date 1714049224113)
++++ b/app/src/main/res/layout/fragment_news.xml	(date 1714049224113)
+@@ -0,0 +1,29 @@
++<?xml version="1.0" encoding="utf-8"?>
++<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
++    android:layout_width="match_parent"
++    android:layout_height="match_parent">
++
++    <androidx.recyclerview.widget.RecyclerView
++        android:id="@+id/recyclerView"
++        android:layout_width="match_parent"
++        android:layout_height="match_parent"
++        android:paddingTop="8dp"
++        android:paddingBottom="8dp"
++        android:clipToPadding="false"
++        android:layout_marginStart="8dp"
++        android:layout_marginEnd="8dp"
++     />
++    <Button
++        android:id="@+id/addNewsButton"
++        android:layout_width="wrap_content"
++        android:layout_height="wrap_content"
++        android:layout_alignParentEnd="true"
++        android:layout_alignParentBottom="true"
++        android:layout_margin="16dp"
++        android:backgroundTint="#bababa"
++        android:text="+"
++        android:visibility="invisible" />
++
++
++
++</RelativeLayout>
+Index: app/src/main/res/layout/item_news.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/layout/item_news.xml b/app/src/main/res/layout/item_news.xml
+new file mode 100644
+--- /dev/null	(date 1714046979624)
++++ b/app/src/main/res/layout/item_news.xml	(date 1714046979624)
+@@ -0,0 +1,32 @@
++<?xml version="1.0" encoding="utf-8"?>
++<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
++    android:layout_width="match_parent"
++    android:layout_height="wrap_content"
++    android:background="#e0e0e0"
++    android:padding="8dp"
++    android:layout_marginBottom="8dp">
++
++    <TextView
++        android:id="@+id/titleTextView"
++        android:layout_width="match_parent"
++        android:layout_height="wrap_content"
++        android:textStyle="bold"
++        android:textSize="18sp"
++        android:padding="8dp" />
++
++    <ImageView
++        android:id="@+id/newsImageView"
++        android:layout_width="match_parent"
++        android:layout_height="200dp"
++        android:scaleType="centerCrop"
++        android:adjustViewBounds="true"
++        android:padding="8dp"
++        android:layout_below="@id/titleTextView" />
++
++    <TextView
++        android:id="@+id/contentTextView"
++        android:layout_width="match_parent"
++        android:layout_height="wrap_content"
++        android:padding="8dp"
++        android:layout_below="@id/newsImageView" />
++</RelativeLayout>
+Index: .idea/vcs.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/vcs.xml b/.idea/vcs.xml
+new file mode 100644
+--- /dev/null	(date 1713769161631)
++++ b/.idea/vcs.xml	(date 1713769161631)
+@@ -0,0 +1,6 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<project version="4">
++  <component name="VcsDirectoryMappings">
++    <mapping directory="$PROJECT_DIR$" vcs="Git" />
++  </component>
++</project>
+\ No newline at end of file
+Index: .idea/.gitignore
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/.gitignore b/.idea/.gitignore
+new file mode 100644
+--- /dev/null	(date 1713766557360)
++++ b/.idea/.gitignore	(date 1713766557360)
+@@ -0,0 +1,3 @@
++# Default ignored files
++/shelf/
++/workspace.xml
+Index: .idea/migrations.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/migrations.xml b/.idea/migrations.xml
+new file mode 100644
+--- /dev/null	(date 1713766557280)
++++ b/.idea/migrations.xml	(date 1713766557280)
+@@ -0,0 +1,10 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<project version="4">
++  <component name="ProjectMigrations">
++    <option name="MigrateToGradleLocalJavaHome">
++      <set>
++        <option value="$PROJECT_DIR$" />
++      </set>
++    </option>
++  </component>
++</project>
+\ No newline at end of file
+Index: .idea/gradle.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/gradle.xml b/.idea/gradle.xml
+new file mode 100644
+--- /dev/null	(date 1713852625875)
++++ b/.idea/gradle.xml	(date 1713852625875)
+@@ -0,0 +1,19 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<project version="4">
++  <component name="GradleMigrationSettings" migrationVersion="1" />
++  <component name="GradleSettings">
++    <option name="linkedExternalProjectsSettings">
++      <GradleProjectSettings>
++        <option name="externalProjectPath" value="$PROJECT_DIR$" />
++        <option name="gradleJvm" value="#GRADLE_LOCAL_JAVA_HOME" />
++        <option name="modules">
++          <set>
++            <option value="$PROJECT_DIR$" />
++            <option value="$PROJECT_DIR$/app" />
++          </set>
++        </option>
++        <option name="resolveExternalAnnotations" value="false" />
++      </GradleProjectSettings>
++    </option>
++  </component>
++</project>
+\ No newline at end of file

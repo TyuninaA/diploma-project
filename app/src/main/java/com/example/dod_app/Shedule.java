@@ -19,16 +19,12 @@ public class Shedule extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_shedule, container, false);
 
-        // Найдем WebView в макете
         webView = view.findViewById(R.id.webView);
 
-        // Включим JavaScript (если это необходимо)
         webView.getSettings().setJavaScriptEnabled(true);
 
-        // Загрузим страницу в WebView
         webView.loadUrl("https://timetable.dku.kz");
 
-        // Укажем WebViewClient, чтобы страницы загружались внутри WebView, а не в стандартном браузере
         webView.setWebViewClient(new WebViewClient());
 
         return view;
